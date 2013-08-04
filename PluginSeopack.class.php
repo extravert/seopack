@@ -18,15 +18,29 @@ if (!class_exists('Plugin')) {
     die('Hacking attemp!');
 }
 
-class PluginSeo extends Plugin {
-
+class PluginSeopack extends Plugin {
+	
+	protected $aInherits = array(
+        'action' => array(
+            'ActionAdmin'
+        ),
+    );
+	
+	public $aDelegates = array(
+        'template' => array(
+            'toolbar_seopack.tpl' => '_toolbar_seopack.tpl'
+        ),
+    );
     /**
      * Plugin Activation
      *
      * @return boolean
      */
     public function Activate() {
-        return true;
+		if (!$this->isTableExists('prefix_seopack')) {
+			$this->ExportSQL(dirname(__FILE__) . '/dump.sql');
+		}
+		return true; 
     }
 
     /**
@@ -35,7 +49,8 @@ class PluginSeo extends Plugin {
      * @return void
      */
     public function Init() {
-        
+		$this->Viewer_AppendScript(Plugin::GetTemplateWebPath(__CLASS__).'js/seopack.js');
+        $this->Viewer_AppendStyle(Plugin::GetTemplateWebPath(__CLASS__).'css/seopack.css');
     }
 
 }
