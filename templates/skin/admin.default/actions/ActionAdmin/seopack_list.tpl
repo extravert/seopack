@@ -49,7 +49,7 @@
                                 <i class="icon-edit"></i>
                             </a>
                             <a href="#" title="{$aLang.plugin.seopack.seopack_admin_action_delete}" class="tip-top i-block"
-                                  onclick="return admin.confirmDelete('{$oSeopack->getId()}', '{$oSeopack->getUrl()|strip_tags|escape:'html'}'); return false;">
+                                  onclick="return admin.confirmDelete('{$oSeopack->getId()}', '{cfg name="path.root.web"}{$oSeopack->getUrl()|strip_tags|escape:'html'}'); return false;">
                                 <i class="icon-remove"></i>
                             </a>
                         </td>

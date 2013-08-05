@@ -58,6 +58,16 @@ class PluginSeopack_ActionAdmin extends PluginSeopack_Inherits_ActionAdmin {
 		
 		$this->SetTemplateAction('seopack_edit');
 	}
+	
+	protected function GetUri($url) {
+		$url = str_replace(Config::Get('path.root.web'), '', $url);
+		$pos=strpos($url, '#'); 
+		if ( $pos=strpos($url, '#') ) {
+			$url = substr($url, 0, $pos );
+		}
+		return trim(strip_tags($url),"/") ;
+	}
+	
 	protected function SubmitSaveSeopack() {
 		
 		if (!$this->CheckSeopackFields()) {
@@ -65,13 +75,13 @@ class PluginSeopack_ActionAdmin extends PluginSeopack_Inherits_ActionAdmin {
         }
 		
 		if (!getRequest('seopack_id')) {
-			if (!$oSeopack = $this->PluginSeopack_Seopack_GetSeopackByUrl( trim(getRequest('url'),"/") )){
+			if (!$oSeopack = $this->PluginSeopack_Seopack_GetSeopackByUrl( $this->GetUri(getRequest('url')) )){
 				$oSeopack = Engine::GetEntity('PluginSeopack_ModuleSeopack_EntitySeopack');
-				$oSeopack->setUrl(trim(strip_tags(getRequest('url')),"/"));
+				$oSeopack->setUrl( $this->GetUri(getRequest('url')) );
 			}
 		}elseif (!$oSeopack = $this->PluginSeopack_Seopack_GetSeopackBySeopackId( getRequest('seopack_id') )) {
 			$oSeopack = Engine::GetEntity('PluginSeopack_ModuleSeopack_EntitySeopack');
-			$oSeopack->setUrl(trim(strip_tags(getRequest('url')),"/"));
+			$oSeopack->setUrl( $this->GetUri(getRequest('url')) );
 		}
 		
 		$oSeopack->setTitle(getRequest('title_auto') ? null : strip_tags(getRequest('title')));
