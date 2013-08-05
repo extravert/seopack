@@ -59,4 +59,4 @@ ls.toolbar.seopack = (function ($) {
 	};
 	
 	return this;
-}).call(ls.toolbar.up || {},jQuery);
+}).call(ls.toolbar.seopack || {},jQuery);
