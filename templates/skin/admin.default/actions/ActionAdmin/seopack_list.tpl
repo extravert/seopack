@@ -32,7 +32,7 @@
                             {$oSeopack->getId()}
                         </td>
 						<td>
-                            {$oSeopack->getUrl()|strip_tags|escape:'html'}
+                            <a href="{cfg name="path.root.web"}{$oSeopack->getUrl()|strip_tags|escape:'html'}" target="_blank">{cfg name="path.root.web"}{$oSeopack->getUrl()|strip_tags|escape:'html'}</a>
                         </td>
 						<td>
                             {if $oSeopack->getTitle()===null}-{else}{$oSeopack->getTitle()|strip_tags|escape:'html'}{/if}

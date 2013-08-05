@@ -12,6 +12,14 @@
 class PluginSeopack_ActionSeopack extends ActionPlugin {
     public function Init() { 
 		$this->Viewer_SetResponseAjax('json');
+		
+		if ($this->User_IsAuthorization()) {
+            $this->oUserCurrent = $this->User_GetUserCurrent();
+        }
+        if (!$this->oUserCurrent || !$this->oUserCurrent->isAdministrator()) {
+            return Router::Location('error/404/');
+        }
+		
     }
 
     /**
@@ -29,23 +37,26 @@ class PluginSeopack_ActionSeopack extends ActionPlugin {
 		
 		if (!$this->CheckSeopackFields()) {
             return false;
-        }
-		
-		if( !$oSeopack = $this->PluginSeopack_Seopack_GetSeopackByUrl( getRequest('url') ) ){
+        } 	
+		if( !$oSeopack = $this->PluginSeopack_Seopack_GetSeopackByUrl( strip_tags(getRequest('url')) ) ){
 			$oSeopack = Engine::GetEntity('PluginSeopack_ModuleSeopack_EntitySeopack');
-			$oSeopack->setUrl(trim(getRequest('url'),"/"));
+			$oSeopack->setUrl(trim(strip_tags(getRequest('url')),"/"));
 		}
 		
 		if (getRequest('title_auto') && getRequest('description_auto') && getRequest('keywords_auto')){
 			$oSeopack->Delete();
+			$this->Message_AddNotice($this->Lang_Get('plugin.seopack.seopack_edit_submit_save_ok'));
 			return;
 		}
 		
-		$oSeopack->setTitle(getRequest('title_auto') ? null : getRequest('title'));
-		$oSeopack->setDescription(getRequest('description_auto') ? null : getRequest('description'));
-		$oSeopack->setKeywords(getRequest('keywords_auto') ? null : getRequest('keywords'));
-
-		$oSeopack->Save();
+		$oSeopack->setTitle(getRequest('title_auto') ? null : strip_tags(getRequest('title')));
+		$oSeopack->setDescription(getRequest('description_auto') ? null : strip_tags(getRequest('description')));
+		$oSeopack->setKeywords(getRequest('keywords_auto') ? null : strip_tags(getRequest('keywords')));
+		
+		if( $oSeopack->Save()){			
+			if($oSeopack->getTitle())$this->Viewer_AssignAjax('title', $oSeopack->getTitle());
+			$this->Message_AddNotice($this->Lang_Get('plugin.seopack.seopack_edit_submit_save_ok'));
+		}
 		
 		return;
 	}
@@ -67,7 +78,7 @@ class PluginSeopack_ActionSeopack extends ActionPlugin {
             $this->Message_AddError($this->Lang_Get('plugin.seopack.keywords_error'), $this->Lang_Get('error'));
             $bOk = false;
         }
-        if (!func_check(getRequest('url', null, 'post'), 'text', 3, 250)) {
+        if (!func_check(getRequest('url', null, 'post'), 'text', 0, 255)) {
             $this->Message_AddError($this->Lang_Get('plugin.seopack.url_error'), $this->Lang_Get('error'));
             $bOk = false;
         }

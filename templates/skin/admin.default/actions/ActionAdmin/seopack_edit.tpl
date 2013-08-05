@@ -27,8 +27,8 @@
     <div class="b-wbox">
         <div class="b-wbox-header">
             <div class="b-wbox-header-title"> 
-                {if $oSeopack}
-                    {$aLang.plugin.seopack.seopack_edit}: {$oSeopack->getUrl()|strip_tags|escape:'html'}
+                {if $sMode=='edit'}
+                    {$aLang.plugin.seopack.seopack_edit}: {cfg name="path.root.web"}{$_aRequest.url|strip_tags|escape:'html'}
                 {else}
 					{$aLang.plugin.seopack.seopack_new}                    
                 {/if}
@@ -38,15 +38,15 @@
             <form action="" method="POST" class="form-horizontal uniform" enctype="multipart/form-data">
                 {hook run='plugin_seopack_form_add_begin'}
                 <input type="hidden" name="security_ls_key" value="{$ALTO_SECURITY_KEY}"/>
-                <input type="hidden" name="seopack_id" value="{if $oSeopack}{$oSeopack->getSeopackId()}{/if}">
+                <input type="hidden" name="seopack_id" value="{if $sMode=='edit'}{$_aRequest.seopack_id}{/if}">
 				
 				<div class="control-group">
                     <label for="seopack_url" class="control-label">{$aLang.plugin.seopack.seopack_create_url}:</label>
 
                     <div class="controls">
-                        <input type="text" id="url" class="input-text" name="url"
-								{if $oSeopack}disabled{/if}
-                               value="{if $oSeopack}{$oSeopack->getUrl()|strip_tags|escape:'html'}{/if}" />
+                        {cfg name="path.root.web"}<input type="text" id="url" class="input-text" name="url"
+								{if $sMode=='edit'}disabled{/if}
+                               value="{if $_aRequest.url}{$_aRequest.url|strip_tags|escape:'html'}{/if}" />
                     </div>
                 </div>
 				
@@ -57,10 +57,10 @@
 							<small>
 								<input type="checkbox" id="title_auto" name="title_auto" value="1"
 								   class="input-checkbox" onclick="toggleForm('title');" 
-								   {if !($oSeopack && $oSeopack->getTitle()!==null)}checked{/if}/> {$aLang.plugin.seopack.auto_generate}
+								   {if !($_aRequest.title)}checked{/if}/> {$aLang.plugin.seopack.auto_generate}
 							</small>
 						</label>						
-						<textarea rows="5" id="seopack-title-form-text" name="title" class="input-text input-width-full" {if !($oSeopack && $oSeopack->getTitle()!==null)}disabled{/if}>{if ($oSeopack && $oSeopack->getTitle()!==null)}{$oSeopack->getTitle()}{/if}</textarea>
+						<textarea rows="5" id="seopack-title-form-text" name="title" class="input-text input-width-full" {if !($_aRequest.title)}disabled{/if}>{if ($_aRequest.title)}{$_aRequest.title}{/if}</textarea>
 					</div>
 				</div>
 				
@@ -71,10 +71,10 @@
 							<small>
 								<input type="checkbox" id="description_auto" name="description_auto" value="1"
 								   class="input-checkbox" onclick="toggleForm('description');"
-								   {if !($oSeopack && $oSeopack->getDescription()!==null)}checked{/if}/> {$aLang.plugin.seopack.auto_generate}
+								   {if !($_aRequest.description)}checked{/if}/> {$aLang.plugin.seopack.auto_generate}
 							</small>
 						</label>
-						<textarea rows="5" id="seopack-description-form-text" name="description" class="input-text input-width-full" {if !($oSeopack && $oSeopack->getDescription()!==null)}disabled{/if}>{if ($oSeopack && $oSeopack->getDescription()!==null)}{$oSeopack->getDescription()}{/if}</textarea>
+						<textarea rows="5" id="seopack-description-form-text" name="description" class="input-text input-width-full" {if !($_aRequest.description)}disabled{/if}>{if ($_aRequest.description)}{$_aRequest.description}{/if}</textarea>
 					</div>
 				</div>
 				
@@ -85,10 +85,10 @@
 							<small>
 								<input type="checkbox" id="keywords_auto" name="keywords_auto" value="1"
 								   class="input-checkbox" onclick="toggleForm('keywords');"
-								   {if !($oSeopack && $oSeopack->getKeywords()!==null)}checked{/if}/> {$aLang.plugin.seopack.auto_generate}
+								   {if !($_aRequest.keywords)}checked{/if}/> {$aLang.plugin.seopack.auto_generate}
 							</small>
 						</label>
-						<textarea rows="5" id="seopack-keywords-form-text" name="keywords" class="input-text input-width-full" {if !($oSeopack && $oSeopack->getKeywords()!==null)}disabled{/if}>{if ($oSeopack && $oSeopack->getKeywords()!==null)}{$oSeopack->getKeywords()}{/if}</textarea>
+						<textarea rows="5" id="seopack-keywords-form-text" name="keywords" class="input-text input-width-full" {if !($_aRequest.keywords)}disabled{/if}>{if ($_aRequest.keywords)}{$_aRequest.keywords}{/if}</textarea>
 					</div>
 				</div>
 				

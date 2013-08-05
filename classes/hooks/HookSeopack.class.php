@@ -34,9 +34,9 @@ class PluginSeopack_HookSeopack extends Hook {
 	
         $sAction = Router::GetAction();
         
-		$oSeopack = $this->PluginSeopack_Seopack_GetSeopackByUrl( trim(Router::GetPathWebCurrent(),"/") );
+		$oSeopack = $this->PluginSeopack_Seopack_GetSeopackByUrl( trim($_SERVER['REQUEST_URI'],"/") );
 		
-		$this->Viewer_Assign("oCurrentUrl", trim(Router::GetPathWebCurrent(),"/") );
+		$this->Viewer_Assign("oCurrentUrl", trim($_SERVER['REQUEST_URI'],"/") );
 		
 		if($oSeopack){
 			$this->Viewer_Assign("oSeopack", $oSeopack);

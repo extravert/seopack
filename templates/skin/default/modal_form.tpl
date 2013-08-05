@@ -11,10 +11,10 @@
 					<small>
 						<input type="checkbox" id="title_auto" name="title_auto" value="1"
 						   class="input-checkbox" onclick="ls.toolbar.seopack.toggleForm('title');" 
-						   {if !($oSeopack && $oSeopack->getTitle()!==null)}checked{/if}/> {$aLang.plugin.seopack.auto_generate}
+						   {if !($oSeopack && $oSeopack->getTitle())}checked{/if}/> {$aLang.plugin.seopack.auto_generate}
 					</small>
 				</label>
-				<textarea rows="5" id="seopack-title-form-text" name="title" class="input-text input-width-full" {if !($oSeopack && $oSeopack->getTitle()!==null)}disabled{/if}>{$sHtmlTitle}</textarea>
+				<textarea rows="3" id="seopack-title-form-text" name="title" class="input-text input-width-full" {if !($oSeopack && $oSeopack->getTitle())}disabled{/if}>{$sHtmlTitle}</textarea>
 			</div>
 		 
 			<div class="block-parameter">
@@ -23,10 +23,10 @@
 					<small>
 						<input type="checkbox" id="description_auto" name="description_auto" value="1"
 						   class="input-checkbox" onclick="ls.toolbar.seopack.toggleForm('description');"
-						   {if !($oSeopack && $oSeopack->getDescription()!==null)}checked{/if}/> {$aLang.plugin.seopack.auto_generate}
+						   {if !($oSeopack && $oSeopack->getDescription())}checked{/if}/> {$aLang.plugin.seopack.auto_generate}
 					</small>
 				</label>
-				<textarea rows="5" cols="20" id="seopack-description-form-text" name="description" class="input-text input-width-full" {if !($oSeopack && $oSeopack->getDescription()!==null)}disabled{/if}>{$sHtmlDescription}</textarea>
+				<textarea rows="3" cols="20" id="seopack-description-form-text" name="description" class="input-text input-width-full" {if !($oSeopack && $oSeopack->getDescription())}disabled{/if}>{$sHtmlDescription}</textarea>
 			</div>
 		 
 			<div class="block-parameter">
@@ -35,10 +35,10 @@
 					<small>
 						<input type="checkbox" id="keywords_auto" name="keywords_auto" value="1"
 						   class="input-checkbox" onclick="ls.toolbar.seopack.toggleForm('keywords');"
-						   {if !($oSeopack && $oSeopack->getKeywords()!==null)}checked{/if}/> {$aLang.plugin.seopack.auto_generate}
+						   {if !($oSeopack && $oSeopack->getKeywords())}checked{/if}/> {$aLang.plugin.seopack.auto_generate}
 					</small>
 				</label>
-				<textarea rows="5" cols="20" id="seopack-keywords-form-text" name="keywords" class="input-text input-width-full" {if !($oSeopack && $oSeopack->getKeywords()!==null)}disabled{/if}>{$sHtmlKeywords}</textarea>
+				<textarea rows="3" cols="20" id="seopack-keywords-form-text" name="keywords" class="input-text input-width-full" {if !($oSeopack && $oSeopack->getKeywords())}disabled{/if}>{$sHtmlKeywords}</textarea>
 			</div>
 			
 			<button type="submit"  onclick="return ls.toolbar.seopack.save('{$oCurrentUrl}');" class="button button-primary">{$aLang.user_note_form_save}</button>

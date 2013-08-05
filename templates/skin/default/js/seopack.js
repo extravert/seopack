@@ -47,7 +47,9 @@ ls.toolbar.seopack = (function ($) {
 			if (result.bStateError) {
 				ls.msg.error(null, result.sMsg);
 			}else{
+				if(result.title)document.title = result.title;
 				$('#seopack-edit').jqmHide();
+				ls.msg.notice(null, result.sMsg);
 			}
 		}.bind(this));
 		return false;

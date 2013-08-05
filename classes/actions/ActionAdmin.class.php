@@ -37,9 +37,19 @@ class PluginSeopack_ActionAdmin extends PluginSeopack_Inherits_ActionAdmin {
             $this->SubmitSaveSeopack();
         }
 		
+		$this->Viewer_Assign('sMode', str_replace('seopack','',Router::GetActionEvent()));	
+		
 		if(Router::GetActionEvent() == 'seopackedit'){
-			if ($oSeopack = $this->PluginSeopack_Seopack_GetSeopackBySeopackId($this->GetParam(0))) {
-				$this->Viewer_Assign('oSeopack', $oSeopack);
+			if ($oSeopack = $this->PluginSeopack_Seopack_GetSeopackBySeopackId($this->GetParam(0))) {			
+			
+				if (!isPost('submit_seopack_save')) {
+					$_REQUEST['url'] = $oSeopack->getUrl();
+					$_REQUEST['title'] = $oSeopack->getTitle();
+					$_REQUEST['description'] = $oSeopack->getDescription();
+					$_REQUEST['keywords'] = $oSeopack->getKeywords();
+					$_REQUEST['seopack_id'] = $oSeopack->getSeopackId();
+				}
+		
 			}else {
                 $this->Message_AddError($this->Lang_Get('plugin.seopack.seopack_edit_notfound'), $this->Lang_Get('error'));
                 $this->SetParam(0, null);
@@ -57,19 +67,19 @@ class PluginSeopack_ActionAdmin extends PluginSeopack_Inherits_ActionAdmin {
 		if (!getRequest('seopack_id')) {
 			if (!$oSeopack = $this->PluginSeopack_Seopack_GetSeopackByUrl( trim(getRequest('url'),"/") )){
 				$oSeopack = Engine::GetEntity('PluginSeopack_ModuleSeopack_EntitySeopack');
-				$oSeopack->setUrl(trim(getRequest('url'),"/"));
+				$oSeopack->setUrl(trim(strip_tags(getRequest('url')),"/"));
 			}
 		}elseif (!$oSeopack = $this->PluginSeopack_Seopack_GetSeopackBySeopackId( getRequest('seopack_id') )) {
 			$oSeopack = Engine::GetEntity('PluginSeopack_ModuleSeopack_EntitySeopack');
-			$oSeopack->setUrl(trim(getRequest('url'),"/"));
+			$oSeopack->setUrl(trim(strip_tags(getRequest('url')),"/"));
 		}
 		
-		$oSeopack->setTitle(getRequest('title_auto') ? null : getRequest('title'));
-		$oSeopack->setDescription(getRequest('description_auto') ? null : getRequest('description'));
-		$oSeopack->setKeywords(getRequest('keywords_auto') ? null : getRequest('keywords'));
+		$oSeopack->setTitle(getRequest('title_auto') ? null : strip_tags(getRequest('title')));
+		$oSeopack->setDescription(getRequest('description_auto') ? null : strip_tags(getRequest('description')));
+		$oSeopack->setKeywords(getRequest('keywords_auto') ? null : strip_tags(getRequest('keywords')));
 		
 		if ( $oSeopack->Save() ) {
-            $this->Message_AddNotice($this->Lang_Get('action.admin.pages_edit_submit_save_ok'));
+            $this->Message_AddNotice($this->Lang_Get('plugin.seopack.seopack_edit_submit_save_ok'));
             Router::Location('admin/seopack/');
         } else {
             $this->Message_AddError($this->Lang_Get('system_error'));
@@ -108,7 +118,7 @@ class PluginSeopack_ActionAdmin extends PluginSeopack_Inherits_ActionAdmin {
             $this->Message_AddError($this->Lang_Get('plugin.seopack.seopack_create_keywords_error'), $this->Lang_Get('error'));
             $bOk = false;
         }
-        if (isPost('url') &&  !func_check(getRequest('url', null, 'post'), 'text', 4, 250)) {
+        if (isPost('url') &&  !func_check(getRequest('url', null, 'post'), 'text', 0, 255)) {
             $this->Message_AddError($this->Lang_Get('plugin.seopack.seopack_create_url_error'), $this->Lang_Get('error'));
             $bOk = false;
         }
